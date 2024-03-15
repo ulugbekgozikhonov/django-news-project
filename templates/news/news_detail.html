@@ -1,12 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>News Detail Page</title>
-</head>
-<body>
-<h1>{{ news.title }}</h1>
-<p>Published date: {{ news.publish_time }}</p>
-<p>{{ news.body | linebreaks }}</p>
-</body>
-</html>
+{% extends 'news/base.html' %}
+{% load static %}
+{% load hitcount_tags %}
+{% block title %}
+    Home Page
+{% endblock title %}
+{% block content %}
+    <h1>{{ news.title }}</h1>
+    <p>Published date: {{ news.publish_time }} | <i class="fa fa-eye" aria-hidden="true"></i> {% get_hit_count for news %}
+        | izohlar soni: {{ comment_count }}
+    </p>
+    <img src="{{ news.image.url }}" alt="rasm" width="300px">
+    <p>{{ news.body | linebreaks }}</p>
+    {% if request.user.is_authenticated and request.user.is_superuser %}
+        <div class="card-footer text-center">
+            <a href="{% url 'news_edit_page' news.slug %}" style="text-decoration: none; color: blue">Edit</a>
+            <a href="{% url 'news_delete_page' news.slug %}" style="text-decoration: none; color: red">Delete</a>
+        </div>
+    {% endif %}<br>
+
+    {% for comment in comments %}
+        <div class="comments" style="padding: 10px">
+            <p class="font_weight_bold">{{ comment.user }}
+                <span class="text-muted font-weight-normal">
+    {{ comment.created_time }}
+</span>
+            </p>
+            {{ comment.body | linebreaks }}
+        </div>
+    {% endfor %}
+    {% if user.is_authenticated %}
+        <div class="col-md-8 card mb-4 mt-3">
+            <div class="card-body">
+                <h3 style="color: red">Enter comment</h3>
+                <form method="post" style="margin-top: 1.3em">{% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <button class="btn btn-primary btn-lg">
+                        Send
+                    </button>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <div class="card-body">
+            <p class="text-danger">Faqat ruyxatdan o'tgan foydalanusvshilar uchun</p>
+            <p class="">Izoh qoldirish uchun ruyxat yoki login qilgin
+                <a href="{% url 'login' %}" style="color: red">Login</a>
+                <a href="{% url 'user_register' %}" style="color: royalblue">Register</a></p>
+        </div>
+    {% endif %}
+{% endblock content %}

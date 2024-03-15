@@ -1,0 +1,21 @@
+{% extends 'news/base.html' %}
+
+{% load static %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+    <h3>Welcome to {{ user.username }} </h3>
+    <h3><a href="{% url 'logout' %}" style="color: darkred">Logout</a></h3>
+    <h2>About your self</h2>
+    <img src="{{ profile.photo.url }}" alt="" width="30%"><br>
+    <label>Username:</label> <input value="{{ user.username }}" readonly placeholder="no enter"> <br>
+    <h4>Date of birth: {{ profile.date_of_birth }}</h4>
+    <label>Email:</label> <input value="{{ user.email }}" readonly placeholder="no enter"> <br>
+    <label>FirstName:</label> <input value="{{ user.first_name }}" readonly placeholder="no enter"> <br>
+    <label>Lastname:</label> <input value="{{ user.last_name }}" readonly placeholder="no enter"> <br>
+
+    <h4><a href="{% url 'password_change' %}" style="color: red">Change password</a></h4>
+    <h4><a href="{% url 'edit_user_info' %}" style="color: red">Change Profile</a></h4>
+
+{% endblock %}

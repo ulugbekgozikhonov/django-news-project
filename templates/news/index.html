@@ -1,5 +1,6 @@
 {% extends 'news/base.html' %}
 {% load static %}
+{% load hitcount_tags %}
 {% block title %}
     Home Page
 {% endblock title %}
@@ -36,6 +37,8 @@
                                         <div class="media-body"><a href="{{ news.get_absolute_url }}"
                                                                    class="catg_title">{{ news.title }}</a></div>
                                     </div>
+                                    <p><i class="fa fa-eye" aria-hidden="true">ko'rilganlar
+                                        soni:</i> {% get_hit_count for news %}</p>
                                 </li>
                             {% endfor %}
                         </ul>
